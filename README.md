@@ -1,0 +1,2 @@
+# gob
+go blog
