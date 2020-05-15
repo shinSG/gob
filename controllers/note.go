@@ -36,15 +36,17 @@ func (c *NoteController) Post() {
 	var note models.Note
 	o := orm.NewOrm()
 	err := json.Unmarshal(c.Ctx.Input.RequestBody, &note)
+	msg := make(map[string]string)
 	if err == nil {
 		noteID, err := o.Insert(&note)
 		if err == nil {
-			c.Data["json"] = "{\"Note ID\": \"" + strconv.FormatInt(noteID, 10) + "\"}"
+			msg["ID"] = strconv.FormatInt(noteID, 10)
 		} else {
-			c.Data["json"] = "{\"msg\": \"Insert Error " + err.Error() + "\"}"
+			msg["msg"] = "Insert Error " + err.Error()
 		}
 	} else {
-		c.Data["json"] = "{\"msg\": \"Insert Error\"}"
+		msg["msg"] = "Insert Error " + err.Error()
 	}
+	c.Data["json"] = msg
 	c.ServeJSON()
 }
